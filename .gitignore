@@ -1,0 +1,8 @@
+# Ignore the node_modules folder
+node_modules/
+.env
+/backend/dist
+/frontend/build
+package-lock.json
+eslint.config.mjs
+tsconfig.json
