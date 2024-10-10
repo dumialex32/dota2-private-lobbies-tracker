@@ -1,92 +1,99 @@
 import { Request, Response } from "express";
-import multer from "multer";
-import { exec } from "child_process";
 import path from "path";
+import { gradlewExecutable, runCommand } from "../utils/utils";
 import fs from "fs";
 import os from "os";
+import { parseMatchEnd, parseMatchInfo } from "../utils/parseUtils";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "backend/parser/clarity-examples");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
-export const uploadFile = (req: Request, res: Response): void => {
-  const replay = req.file;
+export const uploadReplay = async (req: Request, res: Response) => {
+  const replay: Express.Multer.File | undefined = req.file;
+  console.log(replay);
 
   if (!replay) {
-    res.status(400).send("No file uploaded");
+    res.status(400).send("No replay uploaded");
     return;
   }
 
-  console.log("File uploaded successfully:", replay);
-
-  const filePath = path.resolve(replay.path);
-
-  const gradleWrapperPath = path.resolve(
+  // absolute path to the uploaded replay
+  const replayPath: string = path.resolve(replay.path);
+  // absolute path to gradlew.bat or gradlew
+  const gradleWrapperPath: string = path.resolve(
     __dirname,
     "..",
     "parser",
     "clarity-examples",
-    "gradlew.bat"
+    gradlewExecutable // determine os gradlew exec (win or linux)
+  );
+  // absolute path to dir containing gradlew and gradlew.bat scripts
+  const workingDirPath: string = path.resolve(
+    __dirname,
+    "..",
+    "parser",
+    "clarity-examples"
   );
 
-  console.log("Gradle wrapper path:", gradleWrapperPath);
-  console.log("File path:", filePath);
-
-  if (!fs.existsSync(filePath)) {
-    console.error(`File does not exist: ${filePath}`);
-    res.status(404).send("Uploaded file not found");
+  // check if the uploaded replay exists in fs
+  if (!fs.existsSync(replayPath)) {
+    console.error(`Replay does not exist: ${replayPath}`);
+    res.status(404).send("Upload replay not found");
     return;
   }
 
+  // create temp dir to store the replay
   const tempDir = path.join(os.tmpdir(), "dota-pp");
+  // check if temp exist, create if not
   fs.mkdirSync(tempDir, { recursive: true });
-  const tempFilePath = path.join(tempDir, path.basename(filePath));
+  // create the path for the temp replay
+  const tempReplayPath = path.join(tempDir, path.basename(replayPath));
+  // copy the uploaded replay into the temp dir
+  fs.copyFileSync(replayPath, tempReplayPath);
 
-  fs.copyFileSync(filePath, tempFilePath);
+  // create the script task commands
+  const gradleMatchInfoTask = `"${gradleWrapperPath}" infoRun --args "${tempReplayPath}"`;
+  const gradleMatchendTask = `"${gradleWrapperPath}" matchendRun --args "${tempReplayPath}"`;
 
-  const command = `"${gradleWrapperPath}" infoRun --args "${tempFilePath}"`;
+  // run the exec with the task commands and the path to the dir where gradlew.bat and gradlew are located
+  try {
+    const rawMatchInfoData = await runCommand(
+      gradleMatchInfoTask,
+      workingDirPath
+    );
+    const rawMatchendData = await runCommand(
+      gradleMatchendTask,
+      workingDirPath
+    );
 
-  exec(
-    command,
-    { cwd: path.resolve(__dirname, "..", "parser", "clarity-examples") },
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error parsing .dem file: ${error.message}`);
-        return res.status(500).send("Error processing file");
+    console.log(rawMatchInfoData, rawMatchendData);
+
+    // parse the returned raw data to JS object
+    const parsedRawMatchInfoData = parseMatchInfo(rawMatchInfoData);
+    const parsedRawMatchendData = await parseMatchEnd(rawMatchendData);
+
+    // del original uploaded replay
+    fs.unlink(replayPath, (err) => {
+      if (err) {
+        console.error(
+          `Failed to delete the replay from ${replayPath} - ${err?.message}`
+        );
+      } else {
+        console.log("Replay successfully deleted");
       }
-
-      console.log(stdout);
-      if (stderr) {
-        console.error(`stderr: ${stderr}`);
+    });
+    // del the temp copy of the uploaded replay
+    fs.unlink(tempReplayPath, (err) => {
+      if (err) {
+        console.error(
+          `Failed to delete the temp replay from ${tempReplayPath} - ${err.message}`
+        );
+      } else {
+        console.log("Temp replay successfully deleted");
       }
+    });
 
-      fs.unlink(tempFilePath, (err) => {
-        if (err) {
-          console.error(`Error deleting temporary file: ${err.message}`);
-        } else {
-          console.log(`Successfully deleted temporary file: ${tempFilePath}`);
-        }
-      });
-
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error(`Error deleting uploaded file: ${err.message}`);
-        } else {
-          console.log(`Successfully deleted uploaded file: ${filePath}`);
-        }
-      });
-
-      console.log("File processed successfully");
-      res.json();
-    }
-  );
+    console.log(`Replay processing successfully done`);
+    res.json({ parsedRawMatchInfoData, parsedRawMatchendData });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Replay processing failed");
+  }
 };
-
-export const uploadMiddleware = upload.single("file");

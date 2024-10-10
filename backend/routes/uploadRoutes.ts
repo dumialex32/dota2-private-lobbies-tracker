@@ -1,9 +1,9 @@
 import express from "express";
-import { uploadFile, uploadMiddleware } from "../controllers/uploadController";
+import { uploadReplay } from "../controllers/uploadController";
+import { uploadMiddleware } from "../middleware/uploadMiddleware";
 
 const router = express.Router();
 
-// Use the upload middleware before the uploadFile handler
-router.route("/").post(uploadMiddleware, uploadFile);
+router.route("/").post(uploadMiddleware, uploadReplay);
 
 export default router;
