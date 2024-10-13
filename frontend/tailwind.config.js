@@ -5,6 +5,30 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      maxWidth: {
+        128: "80rem",
+      },
+      colors: {
+        "custom-blue": "#09203f",
+        "custom-teal": "#537895",
+        "navbar-blue": "#0c3483",
+        "navbar-light": "#a2b6df",
+        "navbar-mid": "#6b8cce ",
+      },
+      backgroundImage: {
+        "main-gradient": "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);",
+        "nav-gradient": "linear-gradient(-20deg, #2b5876 0%, #4e4376 100%)",
+        "party-main-gradient":
+          "linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);",
+        "lobby-main-gradient":
+          "linear-gradient(to right, #243949 0%, #517fa4 100%);",
+        "lobby-tab": "linear-gradient(to right, #868f96 0%, #596164 100%);",
+        "button-gradient":
+          "linear-gradient(to right, #868f96 0%, #596164 100%);",
+        "button-gradient-success":
+          "linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%);",
+      },
+
       keyframes: {
         slideInFromTop: {
           "0%": { transform: "translateY(-100%)" },

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import connectDB from "./database/db";
 import express, { urlencoded } from "express";
-import uploadRoutes from "../backend/routes/uploadRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 import errorMiddleware from "./middleware/errorMiddleware";
 
 dotenv.config();

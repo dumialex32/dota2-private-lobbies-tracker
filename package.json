@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "server": "nodemon --exec ts-node --files --watch ./backend ./backend/main.ts",
+    "server": "nodemon --exec ts-node --files --watch ./backend ./backend/server.ts",
     "client": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
+}
+
+.btn {
+  @apply bg-button-gradient px-3 p-2 rounded-md;
+}
+
+.btn-success {
+  @apply bg-button-gradient-success px-3 p-2 rounded-md;
+}

@@ -1,0 +1,173 @@
+{
+  "parsedRawMatchInfoData": {
+      "match_id": "7980798037",
+      "game_mode": "2",
+      "game_winner": "3",
+      "player_info": [
+          {
+              "hero_name": "npc_dota_hero_sniper",
+              "player_name": "PuYa!!!MGL!!!ProToTiP",
+              "steamid": "76561198211851220",
+              "game_team": "2"
+          },
+          {
+              "hero_name": "npc_dota_hero_enchantress",
+              "player_name": "Goldless",
+              "steamid": "76561198055736042",
+              "game_team": "3"
+          },
+          {
+              "hero_name": "npc_dota_hero_grimstroke",
+              "player_name": "Na-i O kifla an stomak",
+              "steamid": "76561198334507309",
+              "game_team": "2"
+          },
+          {
+              "hero_name": "npc_dota_hero_invoker",
+              "player_name": "bogdi baiatu\\360\\237\\221\\266",
+              "steamid": "76561198855451275",
+              "game_team": "3"
+          },
+          {
+              "hero_name": "npc_dota_hero_void_spirit",
+              "player_name": "all red",
+              "steamid": "76561198066970431",
+              "game_team": "3"
+          },
+          {
+              "hero_name": "npc_dota_hero_primal_beast",
+              "player_name": "yaksha king",
+              "steamid": "76561198087434553",
+              "game_team": "2"
+          },
+          {
+              "hero_name": "npc_dota_hero_earth_spirit",
+              "player_name": "-Kamael-",
+              "steamid": "76561198129093213",
+              "game_team": "2"
+          },
+          {
+              "hero_name": "npc_dota_hero_slark",
+              "player_name": "joke",
+              "steamid": "76561198084849112",
+              "game_team": "2"
+          },
+          {
+              "hero_name": "npc_dota_hero_disruptor",
+              "player_name": "ShadowHunter",
+              "steamid": "76561198122554517",
+              "game_team": "3"
+          },
+          {
+              "hero_name": "npc_dota_hero_snapfire",
+              "player_name": "Tommy",
+              "steamid": "76561199056730685",
+              "game_team": "3"
+          }
+      ]
+  },
+  "parsedRawMatchendData": {
+      "players": [
+          {
+              "player_name": "PuYa!!!MGL!!!ProToTiP",
+              "level": 23,
+              "kills": 7,
+              "deaths": 17,
+              "assists": 15,
+              "gold": 24160,
+              "last_hits": 269,
+              "denies": 8
+          },
+          {
+              "player_name": "Goldless",
+              "level": 27,
+              "kills": 18,
+              "deaths": 4,
+              "assists": 19,
+              "gold": 23846,
+              "last_hits": 104,
+              "denies": 5
+          },
+          {
+              "player_name": "Na-i O kifla an stomak",
+              "level": 22,
+              "kills": 2,
+              "deaths": 18,
+              "assists": 27,
+              "gold": 24160,
+              "last_hits": 269,
+              "denies": 8
+          },
+          {
+              "player_name": "bogdi baiatu?",
+              "level": 27,
+              "kills": 19,
+              "deaths": 5,
+              "assists": 26,
+              "gold": 23846,
+              "last_hits": 104,
+              "denies": 5
+          },
+          {
+              "player_name": "all red",
+              "level": 28,
+              "kills": 20,
+              "deaths": 8,
+              "assists": 30,
+              "gold": 33030,
+              "last_hits": 295,
+              "denies": 26
+          },
+          {
+              "player_name": "yaksha king",
+              "level": 23,
+              "kills": 6,
+              "deaths": 16,
+              "assists": 17,
+              "gold": 24160,
+              "last_hits": 269,
+              "denies": 8
+          },
+          {
+              "player_name": "-Kamael-",
+              "level": 25,
+              "kills": 8,
+              "deaths": 8,
+              "assists": 23,
+              "gold": 19866,
+              "last_hits": 173,
+              "denies": 10
+          },
+          {
+              "player_name": "joke",
+              "level": 27,
+              "kills": 15,
+              "deaths": 10,
+              "assists": 8,
+              "gold": 30077,
+              "last_hits": 265,
+              "denies": 13
+          },
+          {
+              "player_name": "ShadowHunter",
+              "level": 24,
+              "kills": 3,
+              "deaths": 10,
+              "assists": 39,
+              "gold": 23846,
+              "last_hits": 104,
+              "denies": 5
+          },
+          {
+              "player_name": "Tommy",
+              "level": 24,
+              "kills": 8,
+              "deaths": 12,
+              "assists": 27,
+              "gold": 33030,
+              "last_hits": 295,
+              "denies": 26
+          }
+      ]
+  }
+}

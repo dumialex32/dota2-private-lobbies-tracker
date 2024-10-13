@@ -22,6 +22,13 @@ const fileFilter = (
   cb(null, true);
 };
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    files: 1,
+    fileSize: 120 * 1024 * 1024,
+  },
+});
 
 export const uploadMiddleware = upload.single("replay");
