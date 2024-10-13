@@ -9,7 +9,9 @@ const LobbyScreen: React.FC = () => {
   const navigate = useNavigate();
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [replayData, setReplayData] = useState<any>(null);
   console.log(uploadFileRef.current);
+  console.log(replayData);
 
   const handleFileClick = () => {
     if (uploadFileRef.current) {
@@ -35,7 +37,8 @@ const LobbyScreen: React.FC = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res);
+      setSelectedFileName(null);
+      setReplayData(res.data);
     } catch (err) {
       console.error(err);
     }
