@@ -1,97 +1,79 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import Button from "../../Button";
 import LobbyLogo from "../LobbyLogo";
+import { useNavigate } from "react-router-dom";
 import LobbyTabs from "./LobbyTabs";
-import { useRef, useState } from "react";
-import axios from "axios";
-import { UPLOAD_URL } from "../../../../constants";
+import Loader from "../../Loader";
+import Message from "../../Message";
+import useUploadReplay from "../../../hooks/useUploadReplay";
 
 const LobbyScreen: React.FC = () => {
   const navigate = useNavigate();
-  const uploadFileRef = useRef<HTMLInputElement | null>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-  const [replayData, setReplayData] = useState<any>(null);
-  console.log(uploadFileRef.current);
-  console.log(replayData);
-
-  const handleFileClick = () => {
-    if (uploadFileRef.current) {
-      uploadFileRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFileName(file.name);
-    }
-  };
-
-  const handleSendReplay = async () => {
-    const file = uploadFileRef.current?.files?.[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("replay", file);
-    try {
-      const res = await axios.post(UPLOAD_URL, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setSelectedFileName(null);
-      setReplayData(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const {
+    uploadFileRef,
+    selectedFile,
+    isLoading,
+    notification,
+    handleUploadFileClick,
+    handleAddReplay,
+    handleFileInputChange,
+  } = useUploadReplay();
 
   return (
-    <div className="bg-lobby-main-gradient">
-      <nav className="bg-nav-gradient flex items-center justify-center px-5 border-b border-white relative h-52">
-        <div className="absolute">
-          <LobbyLogo />
-        </div>
-        <div className="flex items-center w-full">
-          <div></div>
-
-          <div className="flex gap-3 items-center ml-auto"></div>
-        </div>
+    <div className="bg-lobby-main-gradient h-screen">
+      <nav className="flex items-center justify-center">
+        <LobbyLogo />
       </nav>
 
-      <nav className="grid grid-cols-[10rem_1fr] gap-4 p-4">
-        <div className="flex flex-col gap-4">
-          <button className="btn" onClick={() => navigate("/")}>
-            Homepage
-          </button>
+      <nav className="bg-nav-gradient grid grid-cols-[8rem_1fr] p-6 items-center border-y-2">
+        <div className="flex flex-col items-center gap-4">
+          <Button onClick={() => navigate("/")}>Homepage</Button>
 
-          <div className="flex flex-col gap-2 relative">
-            {!selectedFileName ? (
-              <button className="btn" onClick={handleFileClick}>
-                Add replay
-              </button>
-            ) : (
-              <button className="btn-success" onClick={handleSendReplay}>
-                Send replay
-              </button>
-            )}
+          <div>
             <input
               type="file"
-              ref={uploadFileRef}
-              onChange={handleFileChange}
+              accept=".dem"
               id="replay"
+              ref={uploadFileRef}
+              onChange={handleFileInputChange}
               hidden
             />
+            <div className="flex flex-col gap-2 relative">
+              {!selectedFile ? (
+                <Button onClick={handleUploadFileClick}>Add replay</Button>
+              ) : isLoading ? (
+                <Loader height="42" width="42" />
+              ) : (
+                <Button onClick={handleAddReplay}>Send Replay</Button>
+              )}
 
-            <p className="absolute -bottom-6 left-0 text-white self-center w-full text-center">
-              {selectedFileName && selectedFileName}
-            </p>
+              <div className="absolute -bottom-3 left-0 text-sm transform translate-y-1/2 whitespace-nowrap w-full text-center">
+                {selectedFile &&
+                  !isLoading &&
+                  !notification?.message &&
+                  selectedFile.name}
+                {notification && (
+                  <Message
+                    error={
+                      notification.type === "error"
+                        ? notification.message
+                        : undefined
+                    }
+                    success={
+                      notification.type === "success"
+                        ? notification.message
+                        : undefined
+                    }
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </div>
-        <LobbyTabs />
-      </nav>
 
-      <main className="h-svh p-4">
-        <Outlet />
-      </main>
+        <div className="container mx-auto">
+          <LobbyTabs />
+        </div>
+      </nav>
     </div>
   );
 };

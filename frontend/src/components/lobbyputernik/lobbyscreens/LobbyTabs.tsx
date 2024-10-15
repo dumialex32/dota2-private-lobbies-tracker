@@ -1,49 +1,24 @@
-import { Link } from "react-router-dom";
-import pdLogo from "../../../assets/pd.png";
-import cupa from "../../../assets/cupa.png";
+import LobbyTab from "../LobbyTab";
+import tabLogo1 from "../../../assets/pils.png";
+import tabLogo2 from "../../../assets/pd.png";
+import bottrophy from "../../../assets/cupa.png";
+import dotaLogo from "../../../assets/dota2.png";
 
 const LobbyTabs: React.FC = () => {
   return (
-    <div className="grid grid-cols-5 gap-3">
-      <Link to="/lobby/latestgames">
-        <div className="grid grid-cols-[1fr_2fr_0.8fr] justify-items-center p-2 rounded-md bg-lobby-tab hover:opacity-80 transition-all duration-300">
-          <img src={pdLogo} alt="PD Logo" />
-          <div className="flex">
-            <div className="flex flex-col items-center gap-2">
-              <h2 className="text-xl font-bold">Latest games</h2>
-              <p className="text-gray-300 text-xs">Ultimele jocuri de lobby</p>
-            </div>
-          </div>
-
-          <img src={cupa} />
-        </div>
-      </Link>
-      <Link to="/lobby/bottomfive">
-        <div className="grid grid-cols-[1fr_2fr_0.8fr] justify-items-center p-2 rounded-md bg-lobby-tab hover:opacity-80 transition-all duration-300">
-          <img src={pdLogo} alt="PD Logo" />
-          <div className="flex">
-            <div className="flex flex-col items-center gap-2">
-              <h2 className="text-xl font-bold">Top 5 terminati</h2>
-              <p className="text-xs text-gray-300">Cei mai slabi</p>
-            </div>
-          </div>
-
-          <img src={cupa} />
-        </div>
-      </Link>
-      <Link to="/lobby/topfive">
-        <div className="grid grid-cols-[1fr_2fr_0.8fr] justify-items-center p-2 rounded-md bg-lobby-tab hover:opacity-80 transition-all duration-300">
-          <img src={pdLogo} alt="PD Logo" />
-          <div className="flex">
-            <div className="flex flex-col items-center gap-2">
-              <h2 className="text-xl font-bold">Top 5 jucători</h2>
-              <p className="text-xs text-gray-300">GODS OF LOBBIES</p>
-            </div>
-          </div>
-
-          <img src={cupa} />
-        </div>
-      </Link>
+    <div className="grid grid-cols-5 gap-4">
+      <LobbyTab tabLogo={dotaLogo} trophy={bottrophy} to="lobby/latestgames">
+        <h2 className="text-l font-semibold">Latest games</h2>
+        <p className="text-xs"></p>
+      </LobbyTab>
+      <LobbyTab tabLogo={tabLogo2} trophy={bottrophy} to="lobby/bottomfive">
+        <h2 className="text-l font-semibold">TOP 5</h2>
+        <p className="text-xs">GOD OF LOBBIES</p>
+      </LobbyTab>
+      <LobbyTab tabLogo={tabLogo1} trophy={bottrophy} to="lobby/topfive">
+        <h2 className="text-l font-semibold">TOP 5</h2>
+        <p className="text-xs">Top terminati</p>
+      </LobbyTab>
     </div>
   );
 };

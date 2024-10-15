@@ -28,7 +28,6 @@ export default {
         "button-gradient-success":
           "linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%);",
       },
-
       keyframes: {
         slideInFromTop: {
           "0%": { transform: "translateY(-100%)" },
