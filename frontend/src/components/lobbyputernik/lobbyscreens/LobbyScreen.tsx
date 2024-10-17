@@ -5,6 +5,7 @@ import LobbyTabs from "./LobbyTabs";
 import Loader from "../../Loader";
 import Message from "../../Message";
 import useUploadReplay from "../../../hooks/useUploadReplay";
+import { IoMdCloseCircle } from "react-icons/io";
 
 const LobbyScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const LobbyScreen: React.FC = () => {
     notification,
     handleUploadFileClick,
     handleAddReplay,
+    handleRemoveFileInput,
     handleFileInputChange,
   } = useUploadReplay();
 
@@ -47,10 +49,18 @@ const LobbyScreen: React.FC = () => {
               )}
 
               <div className="absolute -bottom-3 left-0 text-sm transform translate-y-1/2 whitespace-nowrap w-full text-center">
-                {selectedFile &&
-                  !isLoading &&
-                  !notification?.message &&
-                  selectedFile.name}
+                {selectedFile && !isLoading && !notification?.message && (
+                  <div className="flex gap-1 items-center">
+                    <button>
+                      <IoMdCloseCircle
+                        color="red"
+                        onClick={handleRemoveFileInput}
+                      />
+                    </button>
+                    <p>{selectedFile.name}</p>
+                  </div>
+                )}
+
                 {notification && (
                   <Message
                     error={

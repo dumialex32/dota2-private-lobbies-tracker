@@ -4,15 +4,22 @@ import { gradlewExecutable, runCommand } from "../utils/utils";
 import fs from "fs";
 import os from "os";
 import { parseMatchEnd, parseMatchInfo } from "../utils/parseUtils";
+import LobbyGame from "../models/lobbyGameModel";
+import {
+  ParsedRawMatchInfoData,
+  PlayerInfo,
+} from "../types/parsedRawDataTypes";
+import { AppErrorHandler } from "../middleware/errorMiddleware";
 
 export const uploadReplay = async (req: Request, res: Response) => {
   const replay: Express.Multer.File | undefined = req.file;
-  console.log(replay);
 
   if (!replay) {
     res.status(400).send("No replay uploaded");
     return;
   }
+
+  // check for the replay
 
   // absolute path to the uploaded replay
   const replayPath: string = path.resolve(replay.path);
@@ -63,11 +70,43 @@ export const uploadReplay = async (req: Request, res: Response) => {
       workingDirPath
     );
 
-    console.log(rawMatchInfoData, rawMatchendData);
-
     // parse the returned raw data to JS object
-    const parsedRawMatchInfoData = parseMatchInfo(rawMatchInfoData);
+    const parsedRawMatchInfoData: ParsedRawMatchInfoData =
+      parseMatchInfo(rawMatchInfoData);
     const parsedRawMatchendData = await parseMatchEnd(rawMatchendData);
+
+    // check for existing game in db
+    console.log(parsedRawMatchInfoData.match_id);
+    const existingGame = await LobbyGame.findOne({
+      matchId: parsedRawMatchInfoData.match_id,
+    });
+    if (existingGame) {
+      throw new AppErrorHandler(400, "This replay already exists in DB");
+    }
+
+    if (parsedRawMatchInfoData && parsedRawMatchendData) {
+      const newGame = new LobbyGame({
+        matchId: parsedRawMatchInfoData.match_id,
+        gameWinner: parsedRawMatchInfoData.game_winner, // 2 = radiant, 3 = dire
+        playerInfo: parsedRawMatchInfoData.player_info.map(
+          (info: PlayerInfo, i: number) => ({
+            steamId: info.steamid,
+            playerName: info.player_name,
+            heroName: info.hero_name,
+            gameTeam: info.game_team,
+            kills: parsedRawMatchendData.players[i].kills,
+            deaths: parsedRawMatchendData.players[i].deaths,
+            assists: parsedRawMatchendData.players[i].assists,
+            networth: parsedRawMatchendData.players[i].gold,
+            lastHits: parsedRawMatchendData.players[i].last_hits,
+            denies: parsedRawMatchendData.players[i].denies,
+            level: parsedRawMatchendData.players[i].level,
+          })
+        ),
+      });
+
+      await newGame.save();
+    }
 
     // del original uploaded replay
     fs.unlink(replayPath, (err) => {
@@ -94,6 +133,10 @@ export const uploadReplay = async (req: Request, res: Response) => {
     res.json({ parsedRawMatchInfoData, parsedRawMatchendData });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Replay processing failed");
+    if (err instanceof AppErrorHandler) {
+      res.status(err.statusCode).json({ message: err.message });
+    } else {
+      res.status(500).send("Replay processing failed");
+    }
   }
 };

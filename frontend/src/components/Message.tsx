@@ -6,7 +6,7 @@ type MessageProps = {
 const Message: React.FC<MessageProps> = ({ error, success }) => {
   return (
     <>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500 w-full">{error}</p>}
       {success && <p className="text-green-400 w-full">{success}</p>}
     </>
   );

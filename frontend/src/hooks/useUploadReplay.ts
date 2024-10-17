@@ -5,6 +5,7 @@ import axios, { isAxiosError } from "axios";
 const useUploadReplay = () => {
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  console.log(selectedFile);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [notification, setNotification] = useState<{
     type: "success" | "error";
@@ -25,6 +26,10 @@ const useUploadReplay = () => {
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setSelectedFile(file || null);
+  };
+
+  const handleRemoveFileInput: () => void = () => {
+    setSelectedFile(null);
   };
 
   const handleAddReplay = async () => {
@@ -60,12 +65,13 @@ const useUploadReplay = () => {
 
   return {
     uploadFileRef,
-    handleFileInputChange,
     selectedFile,
-    handleUploadFileClick,
     isLoading,
-    handleAddReplay,
     notification,
+    handleRemoveFileInput,
+    handleFileInputChange,
+    handleUploadFileClick,
+    handleAddReplay,
   };
 };
 
