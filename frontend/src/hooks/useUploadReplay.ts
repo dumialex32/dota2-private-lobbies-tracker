@@ -30,6 +30,9 @@ const useUploadReplay = () => {
 
   const handleRemoveFileInput: () => void = () => {
     setSelectedFile(null);
+    if (uploadFileRef.current) {
+      uploadFileRef.current.value = "";
+    }
   };
 
   const handleAddReplay = async () => {

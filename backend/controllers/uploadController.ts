@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import path from "path";
 import { gradlewExecutable, runCommand } from "../utils/utils";
 import fs from "fs";
@@ -10,13 +10,17 @@ import {
   PlayerInfo,
 } from "../types/parsedRawDataTypes";
 import { AppErrorHandler } from "../middleware/errorMiddleware";
+import { nextTick } from "process";
 
-export const uploadReplay = async (req: Request, res: Response) => {
+export const uploadReplay = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const replay: Express.Multer.File | undefined = req.file;
 
   if (!replay) {
-    res.status(400).send("No replay uploaded");
-    return;
+    throw new Error("No replay uploaded");
   }
 
   // check for the replay
@@ -42,7 +46,6 @@ export const uploadReplay = async (req: Request, res: Response) => {
   // check if the uploaded replay exists in fs
   if (!fs.existsSync(replayPath)) {
     console.error(`Replay does not exist: ${replayPath}`);
-    res.status(404).send("Upload replay not found");
     return;
   }
 
@@ -132,11 +135,6 @@ export const uploadReplay = async (req: Request, res: Response) => {
     console.log(`Replay processing successfully done`);
     res.json({ parsedRawMatchInfoData, parsedRawMatchendData });
   } catch (err) {
-    console.error(err);
-    if (err instanceof AppErrorHandler) {
-      res.status(err.statusCode).json({ message: err.message });
-    } else {
-      res.status(500).send("Replay processing failed");
-    }
+    next(err);
   }
 };
