@@ -45,7 +45,7 @@ export const parseMatchEnd = (rawData: string) => {
   // Parse each player's stats
   for (const line of lines) {
     const match = line.match(
-      /(.+?)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)?\s*\?/
+      /(.+?)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)\s+\?\s+(\d+)/
     );
     if (match) {
       const playerStats = {
@@ -57,6 +57,7 @@ export const parseMatchEnd = (rawData: string) => {
         gold: parseInt(match[6]),
         last_hits: parseInt(match[7]),
         denies: parseInt(match[8]) || 0, // Use 0 if denies is not present
+        steamid: match[9],
       };
       matchEnd["players"].push(playerStats);
     }

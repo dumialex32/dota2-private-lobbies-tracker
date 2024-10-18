@@ -1,16 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import path from "path";
-import { gradlewExecutable, runCommand } from "../utils/utils";
+import {
+  gradlewExecutable,
+  removeTempStoredFile,
+  runCommand,
+} from "../utils/utils";
 import fs from "fs";
 import os from "os";
 import { parseMatchEnd, parseMatchInfo } from "../utils/parseUtils";
 import LobbyGame from "../models/lobbyGameModel";
 import {
+  ParsedRawMatchendData,
   ParsedRawMatchInfoData,
   PlayerInfo,
 } from "../types/parsedRawDataTypes";
 import { AppErrorHandler } from "../middleware/errorMiddleware";
-import { nextTick } from "process";
+import Player from "../models/PlayerModel";
 
 export const uploadReplay = async (
   req: Request,
@@ -73,13 +78,22 @@ export const uploadReplay = async (
       workingDirPath
     );
 
+    console.log("rawMatchInfoData");
+    console.log(rawMatchInfoData);
+    console.log("rawMatchendData");
+    console.log(rawMatchendData);
+
+    // del original uploaded replay
+    removeTempStoredFile(replayPath, tempReplayPath);
+
     // parse the returned raw data to JS object
     const parsedRawMatchInfoData: ParsedRawMatchInfoData =
       parseMatchInfo(rawMatchInfoData);
-    const parsedRawMatchendData = await parseMatchEnd(rawMatchendData);
+    const parsedRawMatchendData: ParsedRawMatchendData = await parseMatchEnd(
+      rawMatchendData
+    );
 
     // check for existing game in db
-    console.log(parsedRawMatchInfoData.match_id);
     const existingGame = await LobbyGame.findOne({
       matchId: parsedRawMatchInfoData.match_id,
     });
@@ -88,6 +102,10 @@ export const uploadReplay = async (
     }
 
     if (parsedRawMatchInfoData && parsedRawMatchendData) {
+      console.log("parsedRawMatchInfoData:");
+      console.log(parsedRawMatchInfoData);
+      console.log("parsedRawMatchendData");
+      console.log(parsedRawMatchendData);
       const newGame = new LobbyGame({
         matchId: parsedRawMatchInfoData.match_id,
         gameWinner: parsedRawMatchInfoData.game_winner, // 2 = radiant, 3 = dire
@@ -111,28 +129,9 @@ export const uploadReplay = async (
       await newGame.save();
     }
 
-    // del original uploaded replay
-    fs.unlink(replayPath, (err) => {
-      if (err) {
-        console.error(
-          `Failed to delete the replay from ${replayPath} - ${err?.message}`
-        );
-      } else {
-        console.log("Replay successfully deleted");
-      }
-    });
-    // del the temp copy of the uploaded replay
-    fs.unlink(tempReplayPath, (err) => {
-      if (err) {
-        console.error(
-          `Failed to delete the temp replay from ${tempReplayPath} - ${err.message}`
-        );
-      } else {
-        console.log("Temp replay successfully deleted");
-      }
-    });
+    // TO DO create new player or update existing player stats
 
-    console.log(`Replay processing successfully done`);
+    // send resp with parsed data
     res.json({ parsedRawMatchInfoData, parsedRawMatchendData });
   } catch (err) {
     next(err);

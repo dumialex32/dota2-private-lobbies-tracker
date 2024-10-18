@@ -51,10 +51,10 @@ const useUploadReplay = () => {
 
       console.log(data);
       setNotification({ type: "success", message: "Replay uploaded!" });
-      setSelectedFile(null);
+      handleRemoveFileInput();
     } catch (err: any) {
       console.error(err);
-      setSelectedFile(null);
+      handleRemoveFileInput();
 
       if (isAxiosError(err) && err.response?.data.message) {
         setNotification({ type: "error", message: err.response.data.message });
