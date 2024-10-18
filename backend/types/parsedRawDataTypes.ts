@@ -22,6 +22,7 @@ interface PlayerStats {
   gold: number;
   last_hits: number;
   denies: number;
+  steamid: string;
 }
 
 export interface ParsedRawMatchendData {

@@ -127,9 +127,72 @@ export const uploadReplay = async (
       });
 
       await newGame.save();
-    }
 
-    // TO DO create new player or update existing player stats
+      // create new player or update existing player stats
+      for (const info of parsedRawMatchInfoData.player_info) {
+        const { game_team, hero_name, player_name, steamid } = info;
+        const playerStats = parsedRawMatchendData.players.find(
+          (player) => player.steamid === steamid
+        );
+
+        // check if player exist in db
+        const playerExist = await Player.findOne({ steamid });
+
+        // if player exist, update player states
+        if (playerStats && game_team && hero_name && player_name && steamid) {
+          if (playerExist) {
+            playerExist.updateOne(
+              { steamid: steamid },
+              {
+                totalGames: Number(playerExist.totalGames + 1),
+                totalKills: Number(playerExist.totalKills + playerStats.kills),
+                totalDeaths: Number(
+                  playerExist.totalAssists + playerStats.deaths
+                ),
+                totalAssists: Number(
+                  playerExist.totalAssists + playerStats.assists
+                ),
+                totalNetworth: Number(
+                  playerExist.totalNetworth + playerStats.gold
+                ),
+                avgKills: Number(
+                  (playerExist.totalKills + playerStats.kills) /
+                    (playerExist.totalGames + 1)
+                ),
+                avgDeaths: Number(
+                  (playerExist.totalDeaths + playerStats.deaths) /
+                    playerExist.totalGames
+                ),
+                avgAssists: Number(
+                  (playerExist.totalAssists + playerStats.assists) /
+                    playerExist.totalGames
+                ),
+                avgNetworth: Number(
+                  (playerExist.totalNetworth + playerStats.gold) /
+                    playerExist.avgNetworth
+                ),
+              }
+            );
+          } else {
+            const newPlayer = new Player({
+              steamId: steamid,
+              playerName: player_name,
+              totalGames: 1,
+              totalKills: playerStats.kills,
+              totalDeaths: playerStats.deaths,
+              totalAssists: playerStats.assists,
+              totalNetworth: playerStats.gold,
+              avgKills: playerStats.kills,
+              avgDeaths: playerStats.deaths,
+              avgAssists: playerStats.assists,
+              avgNetworth: playerStats.gold,
+            });
+
+            await newPlayer.save();
+          }
+        }
+      }
+    }
 
     // send resp with parsed data
     res.json({ parsedRawMatchInfoData, parsedRawMatchendData });
