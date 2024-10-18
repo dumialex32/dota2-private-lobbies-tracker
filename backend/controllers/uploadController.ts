@@ -135,45 +135,38 @@ export const uploadReplay = async (
           (player) => player.steamid === steamid
         );
 
-        // check if player exist in db
-        const playerExist = await Player.findOne({ steamid });
-
-        // if player exist, update player states
         if (playerStats && game_team && hero_name && player_name && steamid) {
+          // check if player exists in the database
+          const playerExist = await Player.findOne({ steamId: steamid });
+
           if (playerExist) {
-            playerExist.updateOne(
-              { steamid: steamid },
+            // update existing player stats
+            const updatedTotalGames = playerExist.totalGames + 1;
+            const updatedTotalKills =
+              playerExist.totalKills + playerStats.kills;
+            const updatedTotalDeaths =
+              playerExist.totalDeaths + playerStats.deaths;
+            const updatedTotalAssists =
+              playerExist.totalAssists + playerStats.assists;
+            const updatedTotalNetworth =
+              playerExist.totalNetworth + playerStats.gold;
+
+            await Player.updateOne(
+              { steamId: steamid },
               {
-                totalGames: Number(playerExist.totalGames + 1),
-                totalKills: Number(playerExist.totalKills + playerStats.kills),
-                totalDeaths: Number(
-                  playerExist.totalAssists + playerStats.deaths
-                ),
-                totalAssists: Number(
-                  playerExist.totalAssists + playerStats.assists
-                ),
-                totalNetworth: Number(
-                  playerExist.totalNetworth + playerStats.gold
-                ),
-                avgKills: Number(
-                  (playerExist.totalKills + playerStats.kills) /
-                    (playerExist.totalGames + 1)
-                ),
-                avgDeaths: Number(
-                  (playerExist.totalDeaths + playerStats.deaths) /
-                    playerExist.totalGames
-                ),
-                avgAssists: Number(
-                  (playerExist.totalAssists + playerStats.assists) /
-                    playerExist.totalGames
-                ),
-                avgNetworth: Number(
-                  (playerExist.totalNetworth + playerStats.gold) /
-                    playerExist.avgNetworth
-                ),
+                totalGames: updatedTotalGames,
+                totalKills: updatedTotalKills,
+                totalDeaths: updatedTotalDeaths,
+                totalAssists: updatedTotalAssists,
+                totalNetworth: updatedTotalNetworth,
+                avgKills: updatedTotalKills / updatedTotalGames,
+                avgDeaths: updatedTotalDeaths / updatedTotalGames,
+                avgAssists: updatedTotalAssists / updatedTotalGames,
+                avgNetworth: updatedTotalNetworth / updatedTotalGames,
               }
             );
           } else {
+            // if player does not exist, create a new one
             const newPlayer = new Player({
               steamId: steamid,
               playerName: player_name,
