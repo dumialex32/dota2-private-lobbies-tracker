@@ -15,7 +15,9 @@ import {
   PlayerInfo,
 } from "../types/parsedRawDataTypes";
 import { AppErrorHandler } from "../middleware/errorMiddleware";
-import Player from "../models/PlayerModel";
+import Player, { ExistingPlayerMap, PlayerSchema } from "../models/PlayerModel";
+import { createUpdatePlayer } from "../utils/databaseUtils";
+import { AnyBulkWriteOperation } from "mongoose";
 
 export const uploadReplay = async (
   req: Request,
@@ -27,8 +29,6 @@ export const uploadReplay = async (
   if (!replay) {
     throw new Error("No replay uploaded");
   }
-
-  // check for the replay
 
   // absolute path to the uploaded replay
   const replayPath: string = path.resolve(replay.path);
@@ -128,62 +128,37 @@ export const uploadReplay = async (
 
       await newGame.save();
 
-      // create new player or update existing player stats
-      for (const info of parsedRawMatchInfoData.player_info) {
-        const { game_team, hero_name, player_name, steamid } = info;
-        const playerStats = parsedRawMatchendData.players.find(
-          (player) => player.steamid === steamid
-        );
+      // retrieve all existing players to minimize database calls
+      const existingPlayers = await Player.find({
+        steamId: {
+          $in: parsedRawMatchInfoData.player_info.map((info) => info.steamid),
+        },
+      });
 
-        if (playerStats && game_team && hero_name && player_name && steamid) {
-          // check if player exists in the database
-          const playerExist = await Player.findOne({ steamId: steamid });
+      const existingPlayerMap: ExistingPlayerMap = existingPlayers.reduce(
+        (map: ExistingPlayerMap, player) => {
+          map[player.steamId] = player;
+          return map;
+        },
+        {} as ExistingPlayerMap
+      );
 
-          if (playerExist) {
-            // update existing player stats
-            const updatedTotalGames = playerExist.totalGames + 1;
-            const updatedTotalKills =
-              playerExist.totalKills + playerStats.kills;
-            const updatedTotalDeaths =
-              playerExist.totalDeaths + playerStats.deaths;
-            const updatedTotalAssists =
-              playerExist.totalAssists + playerStats.assists;
-            const updatedTotalNetworth =
-              playerExist.totalNetworth + playerStats.gold;
+      // create a bulk operation array for Player collection
+      const bulkOps: AnyBulkWriteOperation<PlayerSchema>[] = [];
 
-            await Player.updateOne(
-              { steamId: steamid },
-              {
-                totalGames: updatedTotalGames,
-                totalKills: updatedTotalKills,
-                totalDeaths: updatedTotalDeaths,
-                totalAssists: updatedTotalAssists,
-                totalNetworth: updatedTotalNetworth,
-                avgKills: updatedTotalKills / updatedTotalGames,
-                avgDeaths: updatedTotalDeaths / updatedTotalGames,
-                avgAssists: updatedTotalAssists / updatedTotalGames,
-                avgNetworth: updatedTotalNetworth / updatedTotalGames,
-              }
-            );
-          } else {
-            // if player does not exist, create a new one
-            const newPlayer = new Player({
-              steamId: steamid,
-              playerName: player_name,
-              totalGames: 1,
-              totalKills: playerStats.kills,
-              totalDeaths: playerStats.deaths,
-              totalAssists: playerStats.assists,
-              totalNetworth: playerStats.gold,
-              avgKills: playerStats.kills,
-              avgDeaths: playerStats.deaths,
-              avgAssists: playerStats.assists,
-              avgNetworth: playerStats.gold,
-            });
-
-            await newPlayer.save();
-          }
-        }
+      // create bulk op to create/update players
+      createUpdatePlayer(
+        parsedRawMatchInfoData,
+        parsedRawMatchendData,
+        existingPlayerMap,
+        bulkOps
+      );
+      // Execute the bulk operations
+      if (bulkOps.length > 0) {
+        await Player.bulkWrite(bulkOps);
+        console.log("Bulk operations executed successfully");
+      } else {
+        console.log("No bulk operations to execute");
       }
     }
 

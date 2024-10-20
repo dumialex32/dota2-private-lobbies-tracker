@@ -1,6 +1,6 @@
 import mongoose, { Document } from "mongoose";
 
-interface PlayerSchema extends Document {
+export interface PlayerSchema extends Document {
   steamId: string;
   playerName: string;
   totalGames: number;
@@ -13,6 +13,10 @@ interface PlayerSchema extends Document {
   avgAssists: number;
   avgNetworth: number;
 }
+
+export type ExistingPlayerMap = {
+  [steamId: string]: PlayerSchema;
+};
 
 const playerModel = new mongoose.Schema<PlayerSchema>({
   steamId: { type: String, required: true, unique: true },
