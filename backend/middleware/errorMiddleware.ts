@@ -9,6 +9,14 @@ export class AppErrorHandler extends Error {
   }
 }
 
+// handler for unknown routes
+export const notFound = (req: Request, res: Response, next: NextFunction) => {
+  const err = new Error(`Not found ${req.originalUrl}`);
+  res.status(404);
+  next(err);
+};
+
+// handler for errors passed via next(err)
 const errorMiddleware = (
   err: AppErrorHandler,
   req: Request,

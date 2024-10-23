@@ -1,5 +1,11 @@
+import StickyHeadTable from "../../StickytHeadTable";
+
 const LatestGames: React.FC = () => {
-  return <div className="">latest games</div>;
+  return (
+    <>
+      <StickyHeadTable />
+    </>
+  );
 };
 
 export default LatestGames;

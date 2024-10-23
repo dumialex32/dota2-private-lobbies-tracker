@@ -6,11 +6,14 @@ const LobbyTab: React.FC<{
   tabLogo: string;
   to: string;
   children: ReactNode;
-}> = ({ trophy, tabLogo, to, children }) => {
+  active: boolean;
+}> = ({ trophy, tabLogo, to, children, active }) => {
   return (
     <Link
       to={`/${to}`}
-      className="grid grid-cols-3 bg-lobby-tab rounded-md hover:opacity-75 transition-all duration-300"
+      className={`grid grid-cols-3 bg-lobby-tab rounded-md hover:opacity-75 transition-all duration-300 text-white ${
+        active ? "text-custom-blue  opacity-75" : ""
+      }`}
     >
       <div className="">
         <img src={tabLogo} alt="" className="w-full h-full object-contain" />

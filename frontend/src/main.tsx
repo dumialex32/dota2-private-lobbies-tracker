@@ -1,3 +1,8 @@
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
@@ -8,6 +13,7 @@ import LobbyScreen from "./components/lobbyputernik/lobbyscreens/LobbyScreen.tsx
 import TopFive from "./components/lobbyputernik/lobbyscreens/TopFive.tsx";
 import LatestGames from "./components/lobbyputernik/lobbyscreens/LatestGames.tsx";
 import TopWorstPlayers from "./components/lobbyputernik/lobbyscreens/TopWorstPlayers.tsx";
+import LobbyProvider from "../contextApi/LobbyContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +22,11 @@ const router = createBrowserRouter([
   },
   {
     path: "lobby",
-    element: <LobbyScreen />,
+    element: (
+      <LobbyProvider>
+        <LobbyScreen />
+      </LobbyProvider>
+    ),
     children: [
       {
         index: true,

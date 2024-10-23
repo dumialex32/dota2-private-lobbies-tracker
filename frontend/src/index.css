@@ -9,7 +9,7 @@
 }
 
 .btn {
-  @apply bg-button-gradient px-3 p-2 rounded-md;
+  @apply bg-button-gradient px-3 p-2 rounded-md text-white;
 }
 
 .btn-success {

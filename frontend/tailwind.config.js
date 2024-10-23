@@ -14,6 +14,7 @@ export default {
         "navbar-blue": "#0c3483",
         "navbar-light": "#a2b6df",
         "navbar-mid": "#6b8cce ",
+        "dota-logo-color": "red",
       },
       backgroundImage: {
         "main-gradient": "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);",
