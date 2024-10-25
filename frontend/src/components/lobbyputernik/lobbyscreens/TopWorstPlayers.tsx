@@ -1,5 +1,5 @@
 const TopWorstPlayers: React.FC = () => {
-  return <div>top worst players</div>;
+  return <>top worst players</>;
 };
 
 export default TopWorstPlayers;

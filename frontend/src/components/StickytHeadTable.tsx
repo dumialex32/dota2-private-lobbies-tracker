@@ -7,19 +7,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import axios from "axios";
-import { LOBBYGAMES_URL } from "../../constants";
 import Loader from "./Loader";
-import Error from "./Error";
-import { LobbyGames } from "../types/lobbyGamesTypes";
+import AlertType from "./Alert";
 import { useLobby } from "../hooks/useLobbyContext";
+import { formatDate } from "../utils/formatUtils";
+import { Column, Data, MapTeam } from "../types/stickyHeadTableTypes";
+import { Link } from "react-router-dom";
+import { mapTeam } from "../utils/lobbyGameUtils";
 
-interface Column {
-  id: "replayid" | "winners" | "date";
-  label: string;
-  minWidth?: number;
-  align?: "right";
-  format?: (value: number) => string;
+function createData(replayid: string, winners: string, date: string): Data {
+  return { replayid, winners, date };
 }
 
 const columns: readonly Column[] = [
@@ -34,54 +31,12 @@ const columns: readonly Column[] = [
   },
 ];
 
-interface Data {
-  replayid: string;
-  winners: string;
-  date: string;
-}
-
-function createData(replayid: string, winners: string, date: string): Data {
-  return { replayid, winners, date };
-}
-
-const rows = [
-  createData("2352345", "R", "10/20/2024"),
-  createData("2352345", "R", "10/20/2024"),
-];
-
 export default function StickyHeadTable() {
-  const { refetchKey } = useLobby();
+  const { lobbyGames, isLoading, error } = useLobby();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>("");
-  const [lobbyGames, setLobbyGames] = React.useState<LobbyGames | undefined>();
 
   console.log(lobbyGames);
-
-  React.useEffect(() => {
-    const getLobbyGames = async () => {
-      try {
-        setIsLoading(true);
-        const res = await axios.get(LOBBYGAMES_URL);
-
-        setLobbyGames(res.data);
-      } catch (err: any) {
-        console.error(err);
-        if (axios.isAxiosError(err)) {
-          console.log(err.status);
-          console.error(err.response);
-          setError(err.response?.data.message);
-        } else {
-          setError("Request failed");
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getLobbyGames();
-  }, [refetchKey]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -94,12 +49,22 @@ export default function StickyHeadTable() {
     setPage(0);
   };
 
+  const rows = lobbyGames.map((lobbyGame) => {
+    return createData(
+      lobbyGame.matchId,
+      mapTeam[lobbyGame.gameWinner],
+      formatDate(lobbyGame.createdAt)
+    );
+  });
+
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Error type="error" msg={error} />
+        <AlertType type="error" msg={error} />
+      ) : lobbyGames.length === 0 ? (
+        <AlertType type="info" msg="No replays have been added yet" />
       ) : (
         <Paper
           sx={{
@@ -155,9 +120,13 @@ export default function StickyHeadTable() {
                               align={column.align}
                               style={{ color: "white" }}
                             >
-                              {column.format && typeof value === "number"
-                                ? column.format(value)
-                                : value}
+                              {column.id === "replayid" ? (
+                                <Link to={`/lobby/${value}`}>{value}</Link>
+                              ) : column.format && typeof value === "number" ? (
+                                column.format(value)
+                              ) : (
+                                value
+                              )}
                             </TableCell>
                           );
                         })}

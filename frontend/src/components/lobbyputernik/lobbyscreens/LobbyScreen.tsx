@@ -8,7 +8,7 @@ const LobbyScreen: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-lobby-main-gradient h-screen">
+    <div className="bg-lobby-main-gradient">
       <nav className="flex items-center justify-center">
         <LobbyLogo />
       </nav>
@@ -25,7 +25,7 @@ const LobbyScreen: React.FC = () => {
         </div>
       </nav>
 
-      <main className="container mx-auto mt-8">
+      <main className="container mx-auto mt-8 h-screen">
         <Outlet />
       </main>
     </div>

@@ -4,7 +4,7 @@ import axios, { isAxiosError } from "axios";
 import { useLobby } from "./useLobbyContext";
 
 const useUploadReplay = () => {
-  const { refetch } = useLobby();
+  const { triggerRefetch } = useLobby();
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -55,7 +55,7 @@ const useUploadReplay = () => {
       setNotification({ type: "success", message: "Replay uploaded!" });
 
       // trigger refetch to invalidate the lobby games
-      refetch();
+      triggerRefetch();
       handleRemoveFileInput();
     } catch (err: any) {
       console.error(err);

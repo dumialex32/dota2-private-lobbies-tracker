@@ -3,6 +3,7 @@ import tabLogo1 from "../../../assets/pils.png";
 import tabLogo2 from "../../../assets/pd.png";
 import bottrophy from "../../../assets/cupa.png";
 import dotaLogo from "../../../assets/dota2.png";
+import wasted from "../../../assets/wasted.png";
 import { useLocation } from "react-router-dom";
 
 const LobbyTabs: React.FC = () => {
@@ -36,6 +37,15 @@ const LobbyTabs: React.FC = () => {
       >
         <h2 className="text-l font-semibold">TOP 5</h2>
         <p className="text-xs">Top terminati</p>
+      </LobbyTab>
+      <LobbyTab
+        tabLogo={wasted}
+        trophy={bottrophy}
+        active={pathname === "/lobby/topwasted"}
+        to="lobby/topwasted"
+      >
+        <h2 className="text-l font-semibold">TOP 3 </h2>
+        <p className="text-xs">Top Drogalăi</p>
       </LobbyTab>
     </div>
   );

@@ -1,4 +1,4 @@
-interface PlayerInfo {
+export interface PlayerInfo {
   steamId: string;
   playerName: string;
   heroName: string;
@@ -14,6 +14,7 @@ interface PlayerInfo {
 }
 
 export interface LobbyGames {
+  createdAt: string;
   _id: string;
   matchId: string;
   gameWinner: string;

@@ -14,6 +14,8 @@ import TopFive from "./components/lobbyputernik/lobbyscreens/TopFive.tsx";
 import LatestGames from "./components/lobbyputernik/lobbyscreens/LatestGames.tsx";
 import TopWorstPlayers from "./components/lobbyputernik/lobbyscreens/TopWorstPlayers.tsx";
 import LobbyProvider from "../contextApi/LobbyContext.tsx";
+import TopWasted from "./components/lobbyputernik/lobbyscreens/TopWasted.tsx";
+import LobbyGameDetails from "./components/lobbyputernik/lobbyscreens/LobbyGameDetails.tsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
       {
         path: "bottomfive",
         element: <TopWorstPlayers />,
+      },
+      {
+        path: "topwasted",
+        element: <TopWasted />,
+      },
+      {
+        path: ":id",
+        element: <LobbyGameDetails />,
       },
     ],
   },
