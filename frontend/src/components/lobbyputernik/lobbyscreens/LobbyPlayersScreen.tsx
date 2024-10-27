@@ -33,7 +33,6 @@ const LobbyPlayersScreen: React.FC = () => {
       const res = await axios.get(LOBBYPLAYERS_URL);
       setLobbyPlayers(res.data);
 
-      // Initialize flipped state for all players to false when new data is fetched
       const initialFlippedStates = Object.fromEntries(
         res.data.map((player: LobbyPlayer) => [player.steamId, false])
       );

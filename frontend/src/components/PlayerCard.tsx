@@ -24,9 +24,6 @@ const PlayerCard: React.FC<{
 
       <div className="flex flex-col gap-3 shadow-sm shadow-white rounded-md text-white p-2">
         <div className="flex flex-col gap-2 p-4">
-          <h2 className="text-xl overflow-hidden whitespace-nowrap text-ellipsis">
-            {player.playerName}
-          </h2>
           <StatsRow player={player} />
         </div>
         <button className="btn" onClick={onFlip}>
