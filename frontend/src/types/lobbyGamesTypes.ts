@@ -13,7 +13,7 @@ export interface PlayerInfo {
   _id: string;
 }
 
-export interface LobbyGames {
+export interface LobbyGame {
   createdAt: string;
   _id: string;
   matchId: string;

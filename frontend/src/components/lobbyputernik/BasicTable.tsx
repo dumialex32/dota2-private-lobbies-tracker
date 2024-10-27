@@ -8,7 +8,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { PlayerInfo } from "../../types/lobbyGamesTypes";
 import { formatHeroName } from "../../utils/formatUtils";
-import { Link } from "react-router-dom";
 
 function createData(
   name: string,
@@ -94,9 +93,13 @@ const BasicTable: React.FC<{ players: PlayerInfo[] | undefined }> = ({
                 }}
               >
                 <TableCell>
-                  <Link to={`https://www.dotabuff.com/players/${row.steamid}`}>
+                  <a
+                    href={`https://www.dotabuff.com/players/${row.steamid}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {row.name}
-                  </Link>
+                  </a>
                 </TableCell>
                 <TableCell align="right">{formatHeroName(row.hero)}</TableCell>
                 <TableCell align="right">{row.k}</TableCell>

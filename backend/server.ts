@@ -4,6 +4,7 @@ import express, { urlencoded } from "express";
 import uploadRoutes from "./routes/uploadRoutes";
 import errorMiddleware, { notFound } from "./middleware/errorMiddleware";
 import lobbyGameRoutes from "./routes/lobbyGameRoutes";
+import playerRoutes from "./routes/playerRoutes";
 
 dotenv.config();
 
@@ -14,8 +15,9 @@ const port: number = Number(process.env.PORT) || 5000;
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 
-app.use("/api/lobbygames", lobbyGameRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/lobbygames", lobbyGameRoutes);
+app.use("/api/lobbyplayers", playerRoutes);
 
 app.use(notFound);
 app.use(errorMiddleware);

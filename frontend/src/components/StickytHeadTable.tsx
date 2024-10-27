@@ -1,4 +1,3 @@
-import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,53 +8,23 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Loader from "./Loader";
 import AlertType from "./Alert";
-import { useLobby } from "../hooks/useLobbyContext";
-import { formatDate } from "../utils/formatUtils";
-import { Column, Data, MapTeam } from "../types/stickyHeadTableTypes";
+
 import { Link } from "react-router-dom";
-import { mapTeam } from "../utils/lobbyGameUtils";
 
-function createData(replayid: string, winners: string, date: string): Data {
-  return { replayid, winners, date };
-}
-
-const columns: readonly Column[] = [
-  { id: "replayid", label: "Replay ID", minWidth: 50 },
-  { id: "winners", label: "Winners", minWidth: 50 },
-  {
-    id: "date",
-    label: "Date",
-    minWidth: 50,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-];
+import useStickyHeadTable from "../hooks/useStickyHeadTable";
 
 export default function StickyHeadTable() {
-  const { lobbyGames, isLoading, error } = useLobby();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  console.log(lobbyGames);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const rows = lobbyGames.map((lobbyGame) => {
-    return createData(
-      lobbyGame.matchId,
-      mapTeam[lobbyGame.gameWinner],
-      formatDate(lobbyGame.createdAt)
-    );
-  });
+  const {
+    lobbyGames,
+    isLoading,
+    error,
+    columns,
+    rows,
+    page,
+    rowsPerPage,
+    handleChangePage,
+    handleChangeRowsPerPage,
+  } = useStickyHeadTable();
 
   return (
     <>
@@ -63,7 +32,7 @@ export default function StickyHeadTable() {
         <Loader />
       ) : error ? (
         <AlertType type="error" msg={error} />
-      ) : lobbyGames.length === 0 ? (
+      ) : lobbyGames.length === 0 && !error ? (
         <AlertType type="info" msg="No replays have been added yet" />
       ) : (
         <Paper
