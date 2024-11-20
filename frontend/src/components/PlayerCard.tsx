@@ -24,6 +24,11 @@ const PlayerCard: React.FC<{
 
       <div className="flex flex-col gap-3 shadow-sm shadow-white rounded-md text-white p-2">
         <div className="flex flex-col gap-2 p-4">
+          <div className="py-0.5 px-2 bg-stone-300 rounded-md text-center">
+            <h3 className="text-lg overflow-hidden whitespace-nowrap text-ellipsis font-semibold text-dota-logo-color">
+              {player.playerName}
+            </h3>
+          </div>
           <StatsRow player={player} />
         </div>
         <button className="btn" onClick={onFlip}>

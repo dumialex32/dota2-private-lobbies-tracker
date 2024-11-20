@@ -1,5 +1,5 @@
 const TopFive: React.FC = () => {
-  return <div>top fice</div>;
+  return <div className="">top fice</div>;
 };
 
 export default TopFive;

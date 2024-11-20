@@ -8,13 +8,16 @@ export default {
       maxWidth: {
         128: "80rem",
       },
+      maxHeight: {
+        128: "80rem",
+      },
       colors: {
         "custom-blue": "#09203f",
         "custom-teal": "#537895",
         "navbar-blue": "#0c3483",
         "navbar-light": "#a2b6df",
         "navbar-mid": "#6b8cce ",
-        "dota-logo-color": "red",
+        "dota-logo-color": "#AC2E16",
       },
       backgroundImage: {
         "main-gradient": "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);",

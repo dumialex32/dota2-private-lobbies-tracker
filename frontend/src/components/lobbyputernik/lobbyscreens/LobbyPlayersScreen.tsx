@@ -51,7 +51,7 @@ const LobbyPlayersScreen: React.FC = () => {
       <button className="btn self-start" onClick={handleFlipAll}>
         Flip All
       </button>
-      <div className="grid grid-cols-8 gap-3">
+      <div className="grid grid-cols-8 gap-2 p-2">
         {lobbyPlayers.map((player) => (
           <PlayerCard
             key={player.steamId}

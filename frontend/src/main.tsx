@@ -14,7 +14,6 @@ import TopFive from "./components/lobbyputernik/lobbyscreens/TopFive.tsx";
 import LatestGames from "./components/lobbyputernik/lobbyscreens/LatestGames.tsx";
 import TopWorstPlayers from "./components/lobbyputernik/lobbyscreens/TopWorstPlayers.tsx";
 import LobbyProvider from "../contextApi/LobbyContext.tsx";
-import TopWasted from "./components/lobbyputernik/lobbyscreens/TopWasted.tsx";
 import LobbyGameDetails from "./components/lobbyputernik/lobbyscreens/LobbyGameDetails.tsx";
 import LobbyPlayers from "./components/lobbyputernik/lobbyscreens/LobbyPlayersScreen.js";
 

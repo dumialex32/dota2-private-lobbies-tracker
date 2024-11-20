@@ -3,12 +3,13 @@ import LobbyLogo from "../LobbyLogo";
 import { Outlet, useNavigate } from "react-router-dom";
 import LobbyTabs from "./LobbyTabs";
 import AddReplay from "../AddReplay";
+import Footer from "../../Footer";
 
 const LobbyScreen: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-lobby-main-gradient">
+    <div className="bg-lobby-main-gradient flex flex-col gap-6">
       <nav className="flex items-center justify-center">
         <LobbyLogo />
       </nav>
@@ -25,9 +26,11 @@ const LobbyScreen: React.FC = () => {
         </div>
       </nav>
 
-      <main className="container mx-auto mt-8 h-screen">
+      <main className="container mx-auto">
         <Outlet />
       </main>
+
+      <Footer />
     </div>
   );
 };
