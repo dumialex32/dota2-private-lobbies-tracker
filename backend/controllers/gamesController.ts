@@ -8,15 +8,16 @@ export const getLobbyGames = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.query);
     const { page = 1, limit = 10 } = req.query;
-
+    console.log(page, limit);
+    const totalLobbyGames = await LobbyGame.countDocuments();
     const lobbyGames = await LobbyGame.find({})
-      .skip((+page - 1) * +limit)
+      .skip((Number(page) - 1) * Number(limit))
       .limit(+limit)
       .lean();
 
-    console.log(lobbyGames);
-    res.json(lobbyGames);
+    res.json({ data: lobbyGames, totalLobbyGames });
   } catch (err) {
     console.error(err);
     next(err);
@@ -29,7 +30,7 @@ export const getLobbyGame = async (
   next: NextFunction
 ) => {
   const { matchid } = req.params;
-  console.log(matchid);
+
   try {
     if (!matchid) {
       throw new AppErrorHandler(500, "Matchid not provided");
@@ -43,8 +44,6 @@ export const getLobbyGame = async (
         `Game with matchid "${matchid}" has not been found`
       );
     }
-
-    console.log(game);
 
     res.json(game);
   } catch (err) {

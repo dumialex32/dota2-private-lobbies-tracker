@@ -10,14 +10,12 @@ const useLobbyGameDetails = () => {
   const [lobbyGame, setLobbyGames] = useState<LobbyGame>();
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  console.log(lobbyGame);
-  console.log(error);
 
   const getLobbyGames = useCallback(async () => {
     try {
       setIsLoading(true);
       const res = await axios.get(`${LOBBYGAMES_URL}/${matchid}`);
-      console.log(res);
+
       setLobbyGames(res.data);
     } catch (err: any) {
       if (axios.isAxiosError(err)) {
@@ -41,9 +39,6 @@ const useLobbyGameDetails = () => {
   const direPlayers = lobbyGame?.playerInfo?.filter(
     (player) => player.gameTeam === 3
   );
-
-  console.log(lobbyGame);
-  console.log(radiantPlayers);
 
   return { lobbyGame, isLoading, error, radiantPlayers, direPlayers };
 };

@@ -51,7 +51,6 @@ const useUploadReplay = () => {
         },
       });
 
-      console.log(data);
       setNotification({ type: "success", message: "Replay uploaded!" });
 
       // trigger refetch to invalidate the lobby games

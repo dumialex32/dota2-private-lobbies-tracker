@@ -2,7 +2,7 @@ const Footer: React.FC = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="flex items-center p-8 justify-center">
+    <footer className="flex items-center p-8 justify-center bg-lobby-main-gradient ">
       <p className="text-white">
         Copyright © <span className="font-semibold">{year}</span>{" "}
       </p>

@@ -3,8 +3,8 @@ import PartyCard from "./components/partyputernik/PartyCard";
 
 function App() {
   return (
-    <div className="bg-main-gradient h-screen">
-      <div className="container mx-auto bg-blue">
+    <div className="bg-main-gradient min-h-screen flex flex-col">
+      <div className="container mx-auto bg-blue flex-grow flex flex-col">
         <div className="flex flex-col gap-8">
           <div className="self-center animate-topSlideIn duration-700">
             <img src="src/assets/biceps.png" />
@@ -16,7 +16,7 @@ function App() {
             </h1>
           </div>
 
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center flex-grow">
             <div className="grid grid-cols-2 gap-6 items-center w-full">
               <PartyCard />
 

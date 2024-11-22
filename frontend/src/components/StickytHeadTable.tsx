@@ -22,6 +22,7 @@ export default function StickyHeadTable() {
     rows,
     page,
     rowsPerPage,
+    total,
     handleChangePage,
     handleChangeRowsPerPage,
   } = useStickyHeadTable();
@@ -67,48 +68,46 @@ export default function StickyHeadTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, i) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={i}
-                        sx={{
-                          backgroundImage:
-                            "linear-gradient(-20deg, #2b5876 0%, #4e4376 100%)",
-                        }}
-                      >
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              style={{ color: "white" }}
-                            >
-                              {column.id === "replayid" ? (
-                                <Link to={`/lobby/${value}`}>{value}</Link>
-                              ) : column.format && typeof value === "number" ? (
-                                column.format(value)
-                              ) : (
-                                value
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
+                {rows.map((row, i) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={i}
+                      sx={{
+                        backgroundImage:
+                          "linear-gradient(-20deg, #2b5876 0%, #4e4376 100%)",
+                      }}
+                    >
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ color: "white" }}
+                          >
+                            {column.id === "replayid" ? (
+                              <Link to={`/lobby/${value}`}>{value}</Link>
+                            ) : column.format && typeof value === "number" ? (
+                              column.format(value)
+                            ) : (
+                              value
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10, 25, 50]}
+            rowsPerPageOptions={[6, 10, 20]}
             component="div"
-            count={rows.length}
+            count={total}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
