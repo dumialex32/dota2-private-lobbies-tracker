@@ -10,7 +10,7 @@ export const getLobbyGames = async (
   try {
     console.log(req.query);
     const { page = 1, limit = 10 } = req.query;
-    console.log(page, limit);
+
     const totalLobbyGames = await LobbyGame.countDocuments();
     const lobbyGames = await LobbyGame.find({})
       .skip((Number(page) - 1) * Number(limit))

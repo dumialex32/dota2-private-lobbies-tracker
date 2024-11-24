@@ -1,9 +1,9 @@
-import StickyHeadTable from "../../StickytHeadTable";
+import LatestGamesTable from "../../LatestGamesTable";
 
 const LatestGames: React.FC = () => {
   return (
     <div>
-      <StickyHeadTable />
+      <LatestGamesTable />
     </div>
   );
 };
