@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       proxy: {
-        "/api": env.VITE_API_URL || "http://localhost:5000", // Use the loaded env variable
+        "/api": env.VITE_API_URL || "http://localhost:5000",
       },
     },
   };

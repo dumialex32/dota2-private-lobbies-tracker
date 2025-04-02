@@ -50,6 +50,7 @@ const useUploadReplay = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(data);
 
       setNotification({ type: "success", message: "Replay uploaded!" });
 

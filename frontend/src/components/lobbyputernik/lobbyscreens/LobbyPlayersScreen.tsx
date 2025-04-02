@@ -21,21 +21,24 @@ const sortOptions = [
 
 const LobbyPlayersScreen: React.FC = () => {
   const [query, setQuery] = useState<string>("");
-
   const [lobbyPlayers, setLobbyPlayers] = useState<LobbyPlayer[]>([]);
-  const filteredNames = lobbyPlayers.filter((p) =>
-    p.playerName.toLowerCase().includes(query.toLowerCase())
-  );
   const { refetchKey } = useLobby();
+  const [areAllFlipped, setAreAllFlipped] = useState<boolean>(false);
   const [flippedStates, setFlippedStates] = useState<{
     [key: string]: boolean;
   }>({});
-  const [areAllFlipped, setAreAllFlipped] = useState<boolean>(false);
+
+  // filter players
+  const filteredNames = lobbyPlayers.filter((p) =>
+    p.playerName.toLowerCase().includes(query.toLowerCase())
+  );
+
+  // sort players
   const { sortedData: sortedPlayers } = useSortBy(
     filteredNames || lobbyPlayers
   );
-  console.log(sortedPlayers);
 
+  // search player
   const handleSearch = (value: string) => {
     setQuery(value);
   };
@@ -73,31 +76,33 @@ const LobbyPlayersScreen: React.FC = () => {
     getLobbyPlayers();
   }, [refetchKey]);
 
-  console.log(filteredNames);
-
   return (
-    <div className="flex flex-col gap-3 justify-start">
-      <div className="flex items-center justify-between">
-        <button className="btn self-start" onClick={handleFlipAll}>
-          Flip All
-        </button>
+    <div className="flex flex-col gap-3 px-4 py-2">
+      {lobbyPlayers.length !== 0 && (
+        <div className="flex items-center md:justify-between gap-4">
+          <button
+            className="btn self-end md:self-start "
+            onClick={handleFlipAll}
+          >
+            Flip All
+          </button>
+          {/* Search players */}
+          <div className="flex items-center gap-4">
+            <FormRow label="Search Player">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+            </FormRow>
 
-        {/* Search players */}
-        <div className="flex items-center gap-4">
-          <FormRow label="Search Player">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-          </FormRow>
-
-          {/* Sort players */}
-          <SortBy sortOptions={sortOptions} />
+            {/* Sort players */}
+            <SortBy sortOptions={sortOptions} />
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="grid md:grid-cols-4 xl:grid-cols-8 gap-2 p-2">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 p-2">
         {sortedPlayers?.map((player) => (
           <PlayerCard
             key={player.steamId}

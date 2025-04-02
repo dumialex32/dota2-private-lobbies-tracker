@@ -11,15 +11,14 @@ const LobbyTabs: React.FC = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="grid grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       <LobbyTab
         tabLogo={dotaLogo}
         trophy={bottrophy}
         active={pathname === "/lobby" || pathname === "/lobby/latestgames"}
         to="lobby/latestgames"
       >
-        <h2 className="text-l font-semibold">Latest games</h2>
-        <p className="text-xs"></p>
+        <h2 className="font-semibold uppercase text-center">latest games</h2>
       </LobbyTab>
       <LobbyTab
         tabLogo={tabLogo2}
@@ -27,8 +26,7 @@ const LobbyTabs: React.FC = () => {
         to="lobby/bottomfive"
         active={pathname === "/lobby/bottomfive"}
       >
-        <h2 className="text-l font-semibold">TOP 5</h2>
-        <p className="text-xs">GOD OF LOBBIES</p>
+        <h2 className="font-semibold uppercase text-center">best 5</h2>
       </LobbyTab>
       <LobbyTab
         tabLogo={tabLogo1}
@@ -36,8 +34,7 @@ const LobbyTabs: React.FC = () => {
         active={pathname === "/lobby/topfive"}
         to="lobby/topfive"
       >
-        <h2 className="text-l font-semibold">TOP 5</h2>
-        <p className="text-xs">Top terminati</p>
+        <h2 className="font-semibold uppercase text-center">worst 5</h2>
       </LobbyTab>
       <LobbyTab
         tabLogo={meepo}
@@ -45,8 +42,7 @@ const LobbyTabs: React.FC = () => {
         active={pathname === "/lobby/players"}
         to="lobby/players"
       >
-        <h2 className="text-l font-semibold">PLAYERS</h2>
-        <p className="text-xs">Lobby players</p>
+        <h2 className="font-semibold uppercase text-center">players</h2>
       </LobbyTab>
     </div>
   );

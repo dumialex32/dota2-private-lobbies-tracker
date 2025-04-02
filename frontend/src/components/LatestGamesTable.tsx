@@ -8,7 +8,6 @@ import { LobbyGame } from "../types/lobbyGamesTypes";
 import { LOBBYGAMES_URL } from "../../constants";
 import { formatDate } from "../utils/formatUtils";
 import { mapTeam } from "../utils/lobbyGameUtils";
-import { Column } from "../types/stickyHeadTableTypes";
 import {
   LatestGamesColumn,
   LatestGamesRowData,
@@ -31,9 +30,6 @@ const LatestGamesTable: React.FC = () => {
   const { refetchKey } = useLobby();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-
-  console.log(lobbyGames);
-  console.log(total);
 
   const getLobbyGames = useCallback(async () => {
     try {
@@ -98,6 +94,14 @@ const LatestGamesTable: React.FC = () => {
 
   if (isLoading) return <Loader />;
   if (error) return <AlertType type="error" msg={error} />;
+  if (lobbyGames?.length === 0) {
+    return (
+      <AlertType
+        type="info"
+        msg="No data has been found. You can start by adding your first replay"
+      />
+    );
+  }
 
   return (
     <StickyHeadTable<LatestGamesRowData>

@@ -15,13 +15,15 @@ const LobbyTab: React.FC<{
         active ? "text-custom-blue  opacity-75" : ""
       }`}
     >
-      <div className="">
-        <img src={tabLogo} alt="" className="w-full h-full object-contain" />
+      <div>
+        <img
+          src={tabLogo}
+          alt=""
+          className="w-full h-full object-contain rounded-full"
+        />
       </div>
-      <div className="flex flex-col items-center jus gap-1 pt-2">
-        {children}
-      </div>
-      <div className="">
+      <div className="flex flex-col items-center gap-1 pt-2">{children}</div>
+      <div>
         <img src={trophy} className="w-full h-full object-contain" />
       </div>
     </Link>

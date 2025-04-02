@@ -17,7 +17,7 @@ const AddReplay: React.FC = () => {
   } = useUploadReplay();
 
   return (
-    <div>
+    <div className="w-full md:w-auto">
       <input
         type="file"
         accept=".dem"
@@ -26,16 +26,22 @@ const AddReplay: React.FC = () => {
         onChange={handleFileInputChange}
         hidden
       />
-      <div className="flex flex-col gap-2 relative">
+      <div className="flex md:flex-col gap-2 relative w-full md:w-auto">
         {!selectedFile ? (
-          <Button onClick={handleUploadFileClick}>Add replay</Button>
+          <Button className="w-full md:w-auto" onClick={handleUploadFileClick}>
+            Add replay
+          </Button>
         ) : isLoading ? (
           <Loader height="42" width="42" />
         ) : (
-          <Button onClick={handleAddReplay}>Send Replay</Button>
+          <div className="w-full md:w-auto inline-flex">
+            <Button className="w-full md:w-auto" onClick={handleAddReplay}>
+              Send Replay
+            </Button>
+          </div>
         )}
 
-        <div className="absolute -bottom-3 left-0 text-sm transform translate-y-1/2 whitespace-nowrap w-full text-center">
+        <div className="md:absolute -bottom-3 left-0 text-sm transform translate-y-1/2 whitespace-nowrap w-full text-center">
           {selectedFile && !isLoading && !notification?.message && (
             <div className="flex gap-1 items-center">
               <button>

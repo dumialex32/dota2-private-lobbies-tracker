@@ -1,5 +1,5 @@
 const PartyScreen: React.FC = () => {
-  return <div>werwr</div>;
+  return <div>to do</div>;
 };
 
 export default PartyScreen;

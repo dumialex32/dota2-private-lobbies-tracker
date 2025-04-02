@@ -17,23 +17,21 @@ const SortBy: React.FC<{ sortOptions: SortOption[] }> = ({ sortOptions }) => {
   };
 
   return (
-    <div>
-      <FormRow label="Sort By">
-        <select
-          id="sortBySelect"
-          value={currentValue}
-          onChange={(e) => handleSortValue(e.target.value)}
-        >
-          {sortOptions.map((o) => {
-            return (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            );
-          })}
-        </select>
-      </FormRow>
-    </div>
+    <FormRow label="Sort By">
+      <select
+        id="sortBySelect"
+        value={currentValue}
+        onChange={(e) => handleSortValue(e.target.value)}
+      >
+        {sortOptions.map((o) => {
+          return (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          );
+        })}
+      </select>
+    </FormRow>
   );
 };
 

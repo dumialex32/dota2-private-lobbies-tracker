@@ -16,7 +16,7 @@ function App() {
             </h1>
           </div>
 
-          <div className="flex flex-col justify-center flex-grow">
+          <div className="flex flex-col justify-center flex-grow px-4">
             <div className="grid grid-cols-2 gap-6 items-center w-full">
               <PartyCard />
 
